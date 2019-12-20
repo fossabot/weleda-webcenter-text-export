@@ -2,7 +2,7 @@
   "name": "weleda-webcenter-text-export",
   "version": "0.1.0",
   "description": "Converts WebCenter's XML export into raw text.",
-  "homepage": "https://github.com/D3strukt0r/weleda-webcenter-text-export",
+  "homepage": "http://d3strukt0r.github.io/weleda-webcenter-text-export",
   "bugs": {
     "url": "https://github.com/D3strukt0r/weleda-webcenter-text-export/issues",
     "email": "manuele.vaccari@gmail.com"
@@ -29,6 +29,9 @@
     "react-scripts": "3.3.0",
     "typeface-roboto": "^0.0.75",
     "typescript": "~3.7.2"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

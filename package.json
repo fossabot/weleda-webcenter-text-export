@@ -1,8 +1,21 @@
 {
   "name": "weleda-webcenter-text-export",
   "version": "0.1.0",
+  "description": "Converts WebCenter's XML export into raw text.",
+  "homepage": "http://d3strukt0r.github.io/weleda-webcenter-text-export",
+  "bugs": {
+    "url": "https://github.com/D3strukt0r/weleda-webcenter-text-export/issues",
+    "email": "manuele.vaccari@gmail.com"
+  },
+  "license": "GPL-3.0-only",
+  "author": {
+    "name": "Manuele Vaccari",
+    "email": "manuele.vaccari@gmail.com"
+  },
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.8.0",
+    "@material-ui/icons": "^4.5.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -12,14 +25,21 @@
     "@types/react-dom": "^16.9.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-dropzone": "^10.2.1",
     "react-scripts": "3.3.0",
+    "typeface-roboto": "^0.0.75",
     "typescript": "~3.7.2"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "react-scripts build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"

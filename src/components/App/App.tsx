@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {AppBar, CssBaseline, Toolbar, Typography, Link, Container, makeStyles} from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Dropzone from 'react-dropzone';
+import logo from '../../images/weleda_logo.svg';
 
 const useStyles = makeStyles(theme => ({
     footer: {
@@ -80,8 +81,9 @@ export default function App() {
                 <CssBaseline/>
                 <AppBar position="relative">
                     <Toolbar>
+                        <img src={logo} alt="Logo" />
                         <Typography variant="h6" color="inherit" noWrap>
-                            Weleda WebCenter XML to Text converter
+                            Web Center XML to text converter
                         </Typography>
                     </Toolbar>
                 </AppBar>

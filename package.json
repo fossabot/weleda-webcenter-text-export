@@ -1,7 +1,7 @@
 {
   "name": "weleda-webcenter-text-export",
   "version": "0.1.0",
-  "description": "Converts WebCenter's XML export into raw text.",
+  "description": "Converts Web Center's XML export file into raw text",
   "homepage": "http://d3strukt0r.github.io/weleda-webcenter-text-export",
   "bugs": {
     "url": "https://github.com/D3strukt0r/weleda-webcenter-text-export/issues",

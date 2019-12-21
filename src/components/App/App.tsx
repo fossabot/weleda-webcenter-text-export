@@ -83,7 +83,7 @@ export default function App() {
                     <Toolbar>
                         <img src={logo} alt="Logo" />
                         <Typography variant="h6" color="inherit" noWrap>
-                            Weleda WebCenter XML to Text converter
+                            Web Center XML to text converter
                         </Typography>
                     </Toolbar>
                 </AppBar>

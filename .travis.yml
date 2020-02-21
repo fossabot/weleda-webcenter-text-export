@@ -1,3 +1,4 @@
+os: linux
 language: node_js
 node_js:
     - "stable"
@@ -9,9 +10,9 @@ script:
     - npm run build
 deploy:
     provider: pages
-    skip_cleanup: true
+    token: $GITHUB_TOKEN
+    cleanup: false
     local_dir: build
-    github_token: $GITHUB_TOKEN
     on:
         branch: master
-    fqdn: webcenter-text-export.manuele-vaccari.ch
+    #fqdn: webcenter-text-export.manuele-vaccari.ch TODO: Files are accessed in project folder instead of root

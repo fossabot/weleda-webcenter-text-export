@@ -2,16 +2,21 @@ os: linux
 language: node_js
 node_js:
     - "stable"
+
+notifications:
+    email: false
+
 cache:
     directories:
         - node_modules
+
 script:
     - npm test
     - npm run build
 deploy:
     provider: pages
     token: $GITHUB_TOKEN
-    cleanup: false
+    skip_cleanup: true
     local_dir: build
     on:
         branch: master

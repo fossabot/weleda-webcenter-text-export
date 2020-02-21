@@ -56,7 +56,7 @@ See also the list of [contributors](https://github.com/D3strukt0r/weleda-webcent
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.txt](LICENSE.txt) file for details
 
 ## Acknowledgments
 

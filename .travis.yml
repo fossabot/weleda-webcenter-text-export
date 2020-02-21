@@ -15,4 +15,4 @@ deploy:
     local_dir: build
     on:
         branch: master
-    #fqdn: webcenter-text-export.manuele-vaccari.ch TODO: Files are accessed in project folder instead of root
+    fqdn: webcenter-text-export.manuele-vaccari.ch

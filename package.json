@@ -1,6 +1,6 @@
 {
   "name": "weleda-webcenter-text-export",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "Converts Web Center's XML export file into raw text",
   "homepage": "https://webcenter-text-export.manuele-vaccari.ch",
   "bugs": {

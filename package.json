@@ -1,6 +1,6 @@
 {
   "name": "weleda-webcenter-text-export",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Converts Web Center's XML export file into raw text",
   "homepage": "https://webcenter-text-export.manuele-vaccari.ch",
   "bugs": {
@@ -38,7 +38,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "react-scripts build",
+    "predeploy": "yarn run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {

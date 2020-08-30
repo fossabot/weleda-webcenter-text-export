@@ -93,7 +93,7 @@ jobs:
         run: |
           dpl pages git \
               --repo D3strukt0r/weleda-webcenter-text-export-prod \
-              --token ${{ secret.GITHUB_TOKEN }} \
+              --token ${{ secrets.GITHUB_TOKEN }} \
               --target_branch master \
               --keep_history \
               --allow_empty_commit \
@@ -105,7 +105,7 @@ jobs:
         run: |
           dpl pages git \
               --repo D3strukt0r/weleda-webcenter-text-export-dev \
-              --token ${{ secret.GITHUB_TOKEN }} \
+              --token ${{ secrets.GITHUB_TOKEN }} \
               --target_branch master \
               --keep_history \
               --allow_empty_commit \

@@ -16,7 +16,6 @@ develop-branch (alias nightly)
 [![GH Action CI/CD](https://github.com/D3strukt0r/weleda-webcenter-text-export/workflows/CI/CD/badge.svg?branch=develop)][gh-action]
 [![Codacy grade](https://img.shields.io/codacy/grade/a7d3a41ddccf4662880b35ae48f67454/develop)][codacy]
 
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.

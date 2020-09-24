@@ -282,3 +282,8 @@ Procfile text
 *.*ignore text
 
 # End of https://www.richie-bendall.ml/gitattributes-generator/
+
+.github export-ignore
+.idea export-ignore
+.vscode export-ignore
+.editorconfig export-ignore

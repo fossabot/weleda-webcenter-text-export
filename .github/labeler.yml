@@ -1,0 +1,13 @@
+# Add 'repo' label to any root file changes
+repo:
+  - ./*
+
+# Add 'source' label to any change to files within the source dir EXCEPT for the test files
+source:
+  - public/**/*
+  - src/**/*
+  - "!src/**/*.test.tsx"
+
+# Add 'test' label to any change to files within the source dir that are tests
+test:
+  - src/**/*.test.tsx

@@ -46,8 +46,8 @@ export default function App() {
             let reader = new FileReader();
 
             // Once it's loaded, do something
-            reader.onabort = () => console.log('file reading was aborted');
-            reader.onerror = () => console.log('file reading has failed');
+            reader.onabort = () => console.log('File reading was aborted');
+            reader.onerror = () => console.log('File reading has failed');
             reader.onload = () => {
                 // Parse the xml into an object
                 let readXml = reader.result;

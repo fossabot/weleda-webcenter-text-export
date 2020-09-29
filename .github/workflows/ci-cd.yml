@@ -5,8 +5,18 @@ on:
     branches:
       - master
       - develop
+    paths:
+      - .github/workflows/ci-cd.yml
+      - "docker/**"
+      - "public/**"
+      - "src/**"
+      - .dockerignore
+      - .yarnrc.yml
+      - Dockerfile
+      - package.json
+      - tsconfig.json
+      - yarn.lock
 
-  # Run tests for any PRs.
   pull_request:
 
   workflow_dispatch:
@@ -38,11 +48,11 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Build
-        run: yarn run build
-
       - name: Run tests
         run: yarn run test
+
+      - name: Build
+        run: yarn run build
 
   publish:
     needs: test

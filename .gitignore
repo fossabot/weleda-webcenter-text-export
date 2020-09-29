@@ -233,6 +233,9 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/git,yarn,react,linux,macos,windows,webstorm,visualstudiocode
 
+# Build
+/build
+
 # Testing
 /coverage
 

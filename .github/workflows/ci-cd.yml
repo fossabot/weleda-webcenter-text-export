@@ -7,12 +7,13 @@ on:
       - develop
     paths:
       - .github/workflows/ci-cd.yml
-      - "docker/**"
+      # - "docker/**"
       - "public/**"
       - "src/**"
-      - .dockerignore
+      # - .dockerignore
       - .yarnrc.yml
-      - Dockerfile
+      # - docker-compose.build.yml
+      # - Dockerfile
       - package.json
       - tsconfig.json
       - yarn.lock

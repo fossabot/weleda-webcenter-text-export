@@ -10,8 +10,6 @@ ARG NGINX_VERSION=1.19
 # ---------
 FROM node:${NODE_VERSION}-alpine AS development
 
-ENV PATH /app/node_modules/.bin:$PATH
-
 WORKDIR /app
 
 # Prevent the reinstallation of node modules at every changes in the source code

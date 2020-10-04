@@ -8,7 +8,7 @@ ARG NGINX_VERSION=1.19
 # ---------
 # Development stage
 # ---------
-FROM node:${NODE_VERSION}-alpine AS development
+FROM --platform=${BUILDPLATFORM:-arm64} node:${NODE_VERSION}-alpine AS development
 
 WORKDIR /app
 
@@ -35,7 +35,7 @@ RUN set -eux; \
 # Nginx stage
 # -----------
 # Depends on the "build" stage above
-FROM nginx:${NGINX_VERSION}-alpine AS nginx
+FROM --platform=${TARGETPLATFORM:-arm64} nginx:${NGINX_VERSION}-alpine AS nginx
 
 WORKDIR /app
 

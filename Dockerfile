@@ -76,7 +76,7 @@ RUN set -eux; \
     # Fix permission
     adduser -u 82 -D -S -G www-data www-data
 
-HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD curl -f http://localhost/ || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD curl -fsSL http://localhost >/dev/null || exit 1
 
 COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 ENTRYPOINT ["docker-entrypoint"]

@@ -270,6 +270,7 @@ jobs:
           # List of metadata for an image
           # https://github.com/opencontainers/image-spec/blob/master/annotations.md
           labels: | # optional
+            maintainer=Manuele Vaccari <manuele.vaccari@gmail.com>
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.url=${{ github.event.repository.html_url }}
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}

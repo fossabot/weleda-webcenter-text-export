@@ -35,7 +35,7 @@ RUN set -eux; \
 # Nginx stage
 # -----------
 # Depends on the "build" stage above
-FROM --platform=${TARGETPLATFORM:-linux/amd64} nginx:${NGINX_VERSION}-alpine AS nginx
+FROM nginx:${NGINX_VERSION}-alpine AS nginx
 
 WORKDIR /app
 

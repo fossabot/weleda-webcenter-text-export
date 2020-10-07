@@ -6,8 +6,7 @@ env:
 on:
   push:
     branches:
-      - master
-      - develop
+      - "**"
     tags:
       - "*.*.*"
     paths:
@@ -41,7 +40,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Node.JS
+      - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: "14"
@@ -157,7 +156,7 @@ jobs:
     needs: test
 
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request' && github.repository == 'D3strukt0r/weleda-webcenter-text-export'
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.repository == 'D3strukt0r/weleda-webcenter-text-export'
 
     steps:
       - name: Checkout
@@ -179,6 +178,7 @@ jobs:
           elif [ "$VERSION" = 'develop' ]; then
             VERSION=nightly
           else
+            # Rename my/branch to my-branch
             VERSION=$(echo "$VERSION" | sed -r 's#/+#-#g')
           fi
 

@@ -8,7 +8,7 @@ ARG NGINX_VERSION=1.19
 # ---------
 # Development stage
 # ---------
-FROM node:${NODE_VERSION}-alpine AS development
+FROM --platform=${BUILDPLATFORM:-linux/amd64} node:${NODE_VERSION}-alpine AS development
 
 WORKDIR /app
 
@@ -76,7 +76,7 @@ RUN set -eux; \
     # Fix permission
     adduser -u 82 -D -S -G www-data www-data
 
-HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD curl -f http://localhost/ || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD curl -fsSL http://localhost >/dev/null || exit 1
 
 COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 ENTRYPOINT ["docker-entrypoint"]

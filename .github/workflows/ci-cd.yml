@@ -11,15 +11,15 @@ on:
       - "*.*.*"
     paths:
       - .github/workflows/ci-cd.yml
-      - "docker/**"
-      - "public/**"
-      - "src/**"
-      - .dockerignore
-      - .yarnrc.yml
-      - Dockerfile
-      - package.json
-      - tsconfig.json
-      - yarn.lock
+      - "pwa/.docker/**"
+      - "pwa/public/**"
+      - "pwa/src/**"
+      - pwa/.dockerignore
+      - pwa/.yarnrc.yml
+      - pwa/Dockerfile
+      - pwa/package.json
+      - pwa/tsconfig.json
+      - pwa/yarn.lock
 
   pull_request:
 
@@ -62,12 +62,15 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
+        working-directory: ./pwa
         run: yarn install --immutable
 
       - name: Build
+        working-directory: ./pwa
         run: yarn run build
 
       - name: Run tests
+        working-directory: ./pwa
         run: yarn run test
 
       - name: Setup QEMU
@@ -116,7 +119,7 @@ jobs:
           # Builder instance (see setup-buildx action)
           # builder: # optional
           # Build's context is the set of files located in the specified PATH or URL
-          # context: . # optional, default is git context
+          context: ./pwa # optional, default is git context
           # Path to the Dockerfile
           # file: ./Dockerfile # optional, default is "Dockerfile"
           # List of build-time variables
@@ -262,7 +265,7 @@ jobs:
           # Builder instance (see setup-buildx action)
           # builder:
           # Build's context is the set of files located in the specified PATH or URL
-          # context: . # default is "<Git context>"
+          context: ./pwa # default is "<Git context>"
           # Path to the Dockerfile
           # file: ./Dockerfile # default is "Dockerfile"
           # List of build-time variables
@@ -270,7 +273,7 @@ jobs:
           # List of metadata for an image
           # https://github.com/opencontainers/image-spec/blob/master/annotations.md
           labels: | # optional
-            maintainer=Manuele Vaccari <manuele.vaccari@gmail.com>
+            maintainer=Manuele Vaccari <dev@d3strukt0r.me>
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.url=${{ github.event.repository.html_url }}
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}

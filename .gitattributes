@@ -283,7 +283,12 @@ Procfile text
 
 # End of https://www.richie-bendall.ml/gitattributes-generator/
 
+.docker export-ignore
 .github export-ignore
 .idea export-ignore
 .vscode export-ignore
+.dockerignore export-ignore
 .editorconfig export-ignore
+docker-compose.yml export-ignore
+docker-compose.*.yml export-ignore
+Dockerfile export-ignore

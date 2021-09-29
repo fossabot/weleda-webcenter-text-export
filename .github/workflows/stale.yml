@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/stale@v4
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ github.token }}
           # The message to post on the issue when tagging it. If none provided, will not mark issues stale.
           stale-issue-message: "Stale issue" # optional
           # The message to post on the pr when tagging it. If none provided, will not mark pull requests stale.

@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/labeler@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ github.token }}
           # The path to the label configuration file
           # configuration-path: .github/labeler.yml # optional, default is ".github/labeler.yml"
           # Whether or not to remove labels when matching files are reverted or no longer changed by the PR

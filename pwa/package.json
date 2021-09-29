@@ -5,12 +5,12 @@
   "homepage": "https://webcenter-text-export.manuele-vaccari.ch",
   "bugs": {
     "url": "https://github.com/D3strukt0r/weleda-webcenter-text-export/issues",
-    "email": "manuele.vaccari@gmail.com"
+    "email": "contact@d3strukt0r.me"
   },
   "license": "GPL-3.0-only",
   "author": {
     "name": "Manuele Vaccari",
-    "email": "manuele.vaccari@gmail.com"
+    "email": "dev@d3strukt0r.me"
   },
   "private": true,
   "dependencies": {

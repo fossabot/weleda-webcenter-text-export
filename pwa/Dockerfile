@@ -5,9 +5,9 @@
 ARG NODE_VERSION=14
 ARG NGINX_VERSION=1.19
 
-# ---------
+# -----------------------------------------------------------------------------
 # Development stage
-# ---------
+# -----------------------------------------------------------------------------
 FROM --platform=${BUILDPLATFORM:-linux/amd64} node:${NODE_VERSION}-alpine AS development
 
 WORKDIR /app
@@ -22,18 +22,18 @@ COPY . .
 
 CMD ["yarn", "run", "start"]
 
-# ---------
+# -----------------------------------------------------------------------------
 # Build stage
-# ---------
+# -----------------------------------------------------------------------------
 # Depends on the "development" stage above
 FROM development AS build
 
 RUN set -eux; \
     yarn run build
 
-# -----------
+# -----------------------------------------------------------------------------
 # Nginx stage
-# -----------
+# -----------------------------------------------------------------------------
 # Depends on the "build" stage above
 FROM nginx:${NGINX_VERSION}-alpine AS nginx
 
@@ -61,23 +61,20 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Setup Nginx
 COPY --from=build /app/build ./
 
-COPY docker/nginx.conf       /etc/nginx/nginx.template
-COPY docker/default.conf     /etc/nginx/conf.d/default.template
-COPY docker/default-ssl.conf /etc/nginx/conf.d/default-ssl.template
+COPY .docker/nginx/conf/nginx.conf              /etc/nginx/nginx.template
+COPY .docker/nginx/conf/http.d/default.conf     /etc/nginx/http.d/default.template
+COPY .docker/nginx/conf/http.d/default-ssl.conf /etc/nginx/http.d/default-ssl.template
 
 RUN set -eux; \
     \
     # Remove default config, will be replaced on startup with custom one
     rm /etc/nginx/conf.d/default.conf; \
     \
-    # Empty all php files (to reduce container size). Only the file's existence is important
-    find . -type f -name "*.php" -exec sh -c 'i="$1"; >"$i"' _ {} \;; \
-    \
     # Fix permission
     adduser -u 82 -D -S -G www-data www-data
 
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD curl -fsSL http://localhost >/dev/null || exit 1
 
-COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+COPY .docker/nginx/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["nginx", "-g", "daemon off;"]

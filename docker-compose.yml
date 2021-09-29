@@ -1,12 +1,12 @@
 version: "3.4"
 
 services:
-  client:
+  pwa:
     build:
-      context: .
+      context: ./pwa
       target: development
     tty: true # https://github.com/facebook/create-react-app/issues/8688
     ports:
-      - 80:3000
+      - '80:3000'
     volumes:
-      - .:/app:rw,cached
+      - ./pwa:/app:rw,cached

@@ -15,7 +15,7 @@ WORKDIR /app
 # Prevent the reinstallation of node modules at every changes in the source code
 COPY .yarn ./.yarn
 COPY .yarnrc.yml package.json yarn.lock ./
-RUN set -eux; \
+RUN set -o errexit -o nounset -o pipefail -o xtrace; \
 	yarn install --immutable
 
 COPY . .
@@ -28,7 +28,7 @@ CMD ["yarn", "run", "start"]
 # Depends on the "development" stage above
 FROM development AS build
 
-RUN set -eux; \
+RUN set -o errexit -o nounset -o pipefail -o xtrace; \
     yarn run build
 
 # -----------------------------------------------------------------------------
@@ -37,11 +37,13 @@ RUN set -eux; \
 # Depends on the "build" stage above
 FROM nginx:${NGINX_VERSION}-alpine AS nginx
 
+ENV NGINX_DIR="/etc/nginx"
+
 WORKDIR /app
 
 # Setup Alpine
 # hadolint ignore=DL3018
-RUN set -eux; \
+RUN set -o errexit -o nounset -o pipefail -o xtrace; \
     \
     apk update; \
     apk add --no-cache \
@@ -61,20 +63,22 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Setup Nginx
 COPY --from=build /app/build ./
 
-COPY .docker/nginx/conf/nginx.conf              /etc/nginx/nginx.template
-COPY .docker/nginx/conf/http.d/default.conf     /etc/nginx/http.d/default.template
-COPY .docker/nginx/conf/http.d/default-ssl.conf /etc/nginx/http.d/default-ssl.template
+COPY .docker/nginx/conf/nginx.conf              $NGINX_DIR/nginx.template
+COPY .docker/nginx/conf/http.d/default.conf     $NGINX_DIR/http.d/default.template
+COPY .docker/nginx/conf/http.d/default-ssl.conf $NGINX_DIR/http.d/default-ssl.template
 
-RUN set -eux; \
+RUN set -o errexit -o nounset -o pipefail -o xtrace; \
     \
     # Remove default config, will be replaced on startup with custom one
-    rm /etc/nginx/conf.d/default.conf; \
+    rm $NGINX_DIR/conf.d/default.conf; \
     \
     # Fix permission
     adduser -u 82 -D -S -G www-data www-data
 
-HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD curl -fsSL http://localhost >/dev/null || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD curl --fail http://127.0.0.1 || exit 1
 
 COPY .docker/nginx/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+RUN set -o errexit -o nounset -o pipefail -o xtrace; \
+    chmod +x /usr/bin/docker-entrypoint
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["nginx", "-g", "daemon off;"]

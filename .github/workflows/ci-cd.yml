@@ -110,7 +110,7 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE="$(echo "${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME" | tr '[A-Z]' '[a-z]')"
+          DOCKER_IMAGE="$(echo "${{ secrets.DOCKER_IMAGE }}" | tr '[A-Z]' '[a-z]')"
 
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')

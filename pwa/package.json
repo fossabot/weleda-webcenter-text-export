@@ -2,7 +2,7 @@
   "name": "weleda-webcenter-text-export",
   "version": "1.0.0",
   "description": "Converts Web Center's XML export file into raw text",
-  "homepage": "https://webcenter-text-export.manuele-vaccari.ch",
+  "homepage": ".",
   "bugs": {
     "url": "https://github.com/D3strukt0r/weleda-webcenter-text-export/issues",
     "email": "contact@d3strukt0r.me"
@@ -72,7 +72,9 @@
     "start": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
     "eject": "react-scripts eject",
+    "predeploy": "yarn run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {

@@ -2,6 +2,11 @@
   "name": "weleda-webcenter-text-export",
   "version": "1.0.0",
   "description": "Converts Web Center's XML export file into raw text",
+  "keywords": [
+    "react",
+    "app",
+    "weleda"
+  ],
   "homepage": ".",
   "bugs": {
     "url": "https://github.com/D3strukt0r/weleda-webcenter-text-export/issues",
@@ -9,10 +14,19 @@
   },
   "license": "GPL-3.0-only",
   "author": {
-    "name": "Manuele Vaccari",
+    "name": "D3strukt0r",
     "email": "dev@d3strukt0r.me"
   },
-  "private": true,
+  "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "start": "HTTPS=true react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
+    "eject": "react-scripts eject",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
+  },
   "dependencies": {
     "@material-ui/core": "^4.12",
     "@material-ui/icons": "^4.11",
@@ -52,6 +66,7 @@
   "devDependencies": {
     "gh-pages": "^3.2"
   },
+  "private": true,
   "dependenciesMeta": {
     "webpack-dev-server": {
       "unplugged": true
@@ -66,16 +81,6 @@
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
     ]
-  },
-  "scripts": {
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "HTTPS=true react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
-    "eject": "react-scripts eject",
-    "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

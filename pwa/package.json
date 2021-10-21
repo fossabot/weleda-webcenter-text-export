@@ -19,17 +19,16 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "HTTPS=true react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
+    "start": "HTTPS=true BROWSER=none craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "test:debug": "craco --inspect-brk test --runInBand --no-cache",
     "eject": "react-scripts eject",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
-    "@material-ui/core": "^4.12",
-    "@material-ui/icons": "^4.11",
+    "@craco/craco": "^6.3",
     "@testing-library/jest-dom": "^5.11",
     "@testing-library/react": "^11.1",
     "@testing-library/user-event": "^12.1",
@@ -47,7 +46,6 @@
     "react-dropzone": "^11.4",
     "react-scripts": "4.0",
     "source-map-explorer": "^2.5.2",
-    "typeface-roboto": "^1.1",
     "typescript": "^4.1",
     "web-vitals": "^1.0",
     "workbox-background-sync": "^5.1",
@@ -64,7 +62,10 @@
     "workbox-streams": "^5.1"
   },
   "devDependencies": {
-    "gh-pages": "^3.2"
+    "autoprefixer": "^9",
+    "gh-pages": "^3.2",
+    "postcss": "^7",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2"
   },
   "private": true,
   "dependenciesMeta": {

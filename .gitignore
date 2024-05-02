@@ -1,8 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/git,macos,linux,dotenv,windows,webstorm,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=git,macos,linux,dotenv,windows,webstorm,visualstudiocode
-
-### dotenv ###
-.env
+# Created by https://www.toptal.com/developers/gitignore/api/git,vagrant,webstorm,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=git,vagrant,webstorm,visualstudiocode
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
@@ -19,49 +16,15 @@
 *_LOCAL_*.txt
 *_REMOTE_*.txt
 
-### Linux ###
-*~
-
-# temporary files which can be created if a process still has a handle open of a deleted file
-.fuse_hidden*
-
-# KDE directory preferences
-.directory
-
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
-
-# .nfs files are created when an open file is removed but is still being accessed
-.nfs*
-
-### macOS ###
+### Vagrant ###
 # General
-.DS_Store
-.AppleDouble
-.LSOverride
+.vagrant/
 
-# Icon must end with two \r
-Icon
+# Log files (if you are creating logs in debug mode, uncomment this)
+# *.log
 
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+### Vagrant Patch ###
+*.box
 
 ### VisualStudioCode ###
 .vscode/*
@@ -69,10 +32,13 @@ Temporary Items
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-*.code-workspace
+!.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 .history/
+
+# Built Visual Studio Code Extensions
+*.vsix
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
@@ -143,6 +109,9 @@ atlassian-ide-plugin.xml
 # Cursive Clojure plugin
 .idea/replstate.xml
 
+# SonarLint plugin
+.idea/sonarlint/
+
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 crashlytics.properties
@@ -185,39 +154,26 @@ fabric.properties
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
 
-### Windows ###
-# Windows thumbnail cache files
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
+# Azure Toolkit for IntelliJ plugin
+# https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij
+.idea/**/azureSettings.xml
 
-# Dump file
-*.stackdump
+# End of https://www.toptal.com/developers/gitignore/api/git,vagrant,webstorm,visualstudiocode
 
-# Folder config file
-[Dd]esktop.ini
+### Intellij ###
+# Discord plugin
+.idea/discord.xml
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+# GitHub Copilot plugin
+.idea/copilot/chatSessions/*
 
-# Windows Installer files
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
+# Material UI plugin
+.idea/material_theme_project_new.xml
 
-# Windows shortcuts
-*.lnk
+### Project specific ###
+# Vagrant
+.vagrant.config.yml
 
-# End of https://www.toptal.com/developers/gitignore/api/git,macos,linux,dotenv,windows,webstorm,visualstudiocode
-
-### Other ###
 # Docker
-#docker-compose.yml
-#docker-compose.*.yml
-#docker-compose.bake.yml
-
-# Make
-#Makefile
+compose.yml
+compose.bake.yml

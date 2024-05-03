@@ -1,14 +1,14 @@
-import logo from '../images/weleda-logo.svg';
+import { useTranslation } from 'react-i18next';
+import logo from '#/img/weleda-logo.svg';
 
-function Header() {
-    return(
-        <div className="bg-primary">
-            <div className="container mx-auto p-4 flex flex-row">
-                <img src={logo} alt="Weleda" className="inline-block" />
-                <p className="text-white">Web Center XML to text converter</p>
-            </div>
-        </div>
-    );
+export default function Header() {
+  const { t } = useTranslation('app');
+  return (
+    <div className="bg-primary">
+      <div className="container mx-auto p-4 flex flex-row">
+        <img src={logo} alt="Weleda" className="inline-block" />
+        <p className="text-white">{t('header.title')}</p>
+      </div>
+    </div>
+  );
 }
-
-export default Header;

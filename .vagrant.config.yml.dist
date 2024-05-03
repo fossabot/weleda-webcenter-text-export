@@ -32,10 +32,6 @@ folder:
       - '.git/'
       - '.idea/'
       - '.vscode/'
-      - 'api/var/cache/*'
-      - 'api/var/logs/*'
-      - 'api/var/sessions/*'
-      - 'api/vendor/*'
       - 'pwa/node_modules/*'
       - 'pwa/build/*'
   # If you want to use SMB, set the type to "smb" and uncomment the following

@@ -2,189 +2,115 @@ name: CI/CD
 
 on:
   push:
-    branches:
-      - "**"
-    tags:
-      - "*.*.*"
+    # Publish latest or develop branch as prerelease.
+    branches: [ master, develop ]
+    # Publish semver tags as releases.
+    tags: [ '*.*.*' ]
+    # and only if one of these files changed.
     paths:
-      - .github/workflows/ci-cd.yml
-      - "pwa/.docker/**"
-      - "pwa/public/**"
-      - "pwa/src/**"
-      - pwa/.dockerignore
-      - pwa/.yarnrc.yml
-      - pwa/Dockerfile
+      - .github/workflows/ci.yml
+      - .dockerignore
+      - pwa.Dockerfile
+
+      # Below should match .dockerignore
+      - '.docker/rootfs/**'
+
+      - 'pwa/.docker/rootfs/**'
+      - 'pwa/public/**'
+      - 'pwa/src/**'
+      - pwa/.browserslistrc
+      - pwa/index.html
       - pwa/package.json
+      - pwa/pnpm-lock.yaml
+      - pwa/postcss.config.js
+      - pwa/tailwind.config.js
       - pwa/tsconfig.json
-      - pwa/yarn.lock
-
+      - pwa/tsconfig.node.json
+      - pwa/vite.config.ts
+      - pwa/vitest-setup.js
   pull_request:
-
-  workflow_dispatch:
+    branches: [ master ]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
-    # https://github.com/marketplace/actions/build-and-push-docker-images#local-registry
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      # Install the cosign tool except on PR
+      # https://github.com/sigstore/cosign-installer
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@v3
         with:
-          node-version: '16'
+          cosign-release: 'v2.2.2'
 
-      # https://github.com/actions/cache/blob/main/examples.md#node---yarn-2
-      - run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-        id: yarn-cache-dir-path
-      - uses: actions/cache@v2
-        id: yarn-cache
+      # Set up BuildKit Docker container builder to be able to build
+      # multi-platform images and export cache
+      # https://github.com/docker/setup-buildx-action
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+      - name: Log into registry Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - run: yarn install --immutable
-        working-directory: ./pwa
-
-      - run: yarn run build
-        working-directory: ./pwa
-
-      - run: yarn run test
-        working-directory: ./pwa
-
-      # Supports "linux/amd64,linux/arm64,linux/riscv64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6" usually
-      - uses: docker/setup-qemu-action@v1
-        id: qemu
-
-      - uses: docker/setup-buildx-action@v1
-        id: buildx
-        with:
-          driver-opts: network=host
-
-      # https://github.com/marketplace/actions/build-and-push-docker-images#leverage-github-cache
-      - uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - uses: docker/build-push-action@v2
-        with:
-          context: ./pwa
-          # build-args:
-          tags: localhost:5000/name/app:latest
-          # pull: false
-          # target:
-          platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6
-          # load: false
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-
-      - name: Inspect
-        run: |
-          docker buildx imagetools inspect localhost:5000/name/app:latest
-
-  # Deploy to Dev/Staging/Production
-  deploy:
-    needs: test
-
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop') && github.repository == 'D3strukt0r/weleda-webcenter-text-export'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      # https://github.com/actions/starter-workflows/blob/main/ci/docker-publish.yml
-      # https://github.com/docker/build-push-action#complete-workflow
-      - name: Prepare
-        id: prep
-        run: |
-          DOCKER_IMAGE="$(echo "${{ secrets.DOCKER_IMAGE }}" | tr '[A-Z]' '[a-z]')"
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Rename branches which stand for latest or similar
-          if [ "$VERSION" = '${{ github.event.repository.default_branch }}' ]; then
-            VERSION=latest
-          elif [ "$VERSION" = 'develop' ]; then
-            VERSION=nightly
-          else
-            # Rename my/branch to my-branch
-            VERSION=$(echo "$VERSION" | sed -r 's#/+#-#g')
-          fi
-
-          # Strip "v" prefix from tag name
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            VERSION=$(echo $VERSION | sed -e 's/^v//')
-          fi
-
-          # Create tags
-          TAGS="${DOCKER_IMAGE}:${VERSION}"
-          if [[ $VERSION =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-            MINOR=${VERSION%.*}
-            MAJOR=${MINOR%.*}
-            TAGS="$TAGS,${DOCKER_IMAGE}:${MINOR},${DOCKER_IMAGE}:${MAJOR},${DOCKER_IMAGE}:latest"
-          # elif [ "${{ github.event_name }}" = 'push' ]; then
-          #   TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::8}"
-          fi
-
-          echo ::set-output name=version::${VERSION}
-          echo ::set-output name=tags::${TAGS}
-          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-
-      # Supports "linux/amd64,linux/arm64,linux/riscv64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6" usually
-      - uses: docker/setup-qemu-action@v1
-        id: qemu
-
-      - uses: docker/setup-buildx-action@v1
-        id: buildx
-
-      # https://github.com/marketplace/actions/build-and-push-docker-images#leverage-github-cache
-      - uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          # Username and password (or personal access token if using 2FA) for Docker Hub login
+          username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - uses: docker/build-push-action@v2
-        id: docker_build
+      # Extract metadata (tags, labels) for Docker
+      # https://github.com/docker/metadata-action
+      - name: Extract Docker metadata (PWA)
+        id: meta-pwa
+        uses: docker/metadata-action@v5
         with:
-          context: ./pwa
-          # build-args:
-          # https://github.com/opencontainers/image-spec/blob/master/annotations.md
-          labels: |
-            maintainer=Manuele Vaccari <dev@d3strukt0r.me>
-            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
-            org.opencontainers.image.url=${{ github.event.repository.html_url }}
-            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
-            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
-            org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.title=${{ github.event.repository.name }}
-            org.opencontainers.image.description=${{ github.event.repository.description }}
-            org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
-          tags: ${{ steps.prep.outputs.tags }}
-          # pull: false
-          # target:
-          platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6
-          # load: false
+          images: ${{ vars.IMAGE_NAME }}
+
+      - name: Start SSH agent for Docker build with '--mount=type=ssh'
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Build and push Docker image with Buildx (don't push on PR)
+      # https://github.com/docker/build-push-action
+      - name: Build and push Docker image (PWA)
+        id: build-and-push-pwa
+        uses: docker/build-push-action@v5
+        with:
+          file: ./pwa.Dockerfile
+          target: prod
+          platforms: linux/amd64 #,linux/arm64 # TODO: Reenable when needed
+          ssh: |
+            default
           push: ${{ github.event_name != 'pull_request' }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: ${{ steps.meta-pwa.outputs.tags }}
+          labels: ${{ steps.meta-pwa.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Sign the resulting Docker image digest except on PRs.
+      # This will only write to the public Rekor transparency log when the Docker
+      # repository is public to avoid leaking data. If you would like to publish
+      # transparency data even for private images, pass --force to cosign below.
+      # https://github.com/sigstore/cosign
+      - name: Sign the published Docker image (PWA)
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
+          TAGS: ${{ steps.meta-pwa.outputs.tags }}
+          DIGEST: ${{ steps.build-and-push-pwa.outputs.digest }}
+        # This step uses the identity token to provision an ephemeral certificate
+        # against the sigstore community Fulcio instance.
+        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}

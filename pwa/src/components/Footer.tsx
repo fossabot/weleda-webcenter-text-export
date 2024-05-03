@@ -1,9 +1,13 @@
-function Footer() {
-    return(
-        <footer className="mt-auto">
-            <p className="text-secondary text-center my-4">Copyright © <a href="https://github.com/D3strukt0r">D3strukt0r</a> {new Date().getFullYear()}.</p>
-        </footer>
-    );
-}
+import { Markup } from 'interweave';
+import { useTranslation } from 'react-i18next';
 
-export default Footer;
+export default function Footer() {
+  const { t } = useTranslation('app');
+  return (
+    <footer className="mt-auto">
+      <p className="text-secondary text-center my-4">
+        <Markup content={t('footer.copyright', { year: new Date().getFullYear() })} />
+      </p>
+    </footer>
+  );
+}

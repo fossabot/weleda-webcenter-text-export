@@ -16,7 +16,7 @@ updates:
     schedule:
       interval: "daily"
 
-  # macOS pnpm
+  # PWA pnpm
   - package-ecosystem: "npm"
     directory: "/pwa"
     target-branch: "develop"
@@ -26,3 +26,11 @@ updates:
       - "D3strukt0r"
     schedule:
       interval: "daily"
+    groups:
+      pwa-dependencies:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
